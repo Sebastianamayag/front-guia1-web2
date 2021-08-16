@@ -32,14 +32,14 @@ export const UsuarioScreen = () => {
         if(body.Status==200){
             swal({
                 title:"Correcto",
-                text:"Libro actualizado correctamente",
+                text:"Usuario actualizado correctamente",
                 icon:"success",
                 button:"OK"
             })
         }else{
             swal({
                 title:"Error",
-                text:"No se ha podido actualizar el libro",
+                text:"No se ha podido actualizar el usuario",
                 icon:"error",
                 button:"OK"
             })

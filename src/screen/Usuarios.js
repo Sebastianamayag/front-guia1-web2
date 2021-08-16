@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -18,9 +19,29 @@ const useStyles = makeStyles({
 
 export const Usuarios = () => {
   const classes = useStyles();
+  const { usuarioId } = useParams();
+  const [usuario, setusuario] = useState("");
+  const [lastname, setlastname] = useState("");
+  const [phone, setphone] = useState(0);
+  const [address, setaddress] = useState("");
+  const [email, setemail] = useState("");
+  const [document, setdocument] = useState(0);
     useEffect(() => {
         traerData();
-    }, [])
+    }, []);
+
+    const TraerUsuario=async()=>{
+      const resp = await usuariosApi(`user/getone/${usuarioId}`);
+      const user = await resp.json();
+      setusuario(user[0].firstName);
+      setlastname(user[0].lastName);
+      setphone(user[0].phone);
+      setaddress(user[0].address);
+      setdocument(user[0].document);
+      setemail(user[0].email)
+      console.log(usuario)
+  }
+
     const [usuarios, setUsuarios] = useState([]);
 
     const traerData=async()=>{
@@ -50,6 +71,26 @@ export const Usuarios = () => {
         }
     }
 
+    const handleSubmit=async()=>{
+      const resp = await usuariosApi(`user/create`, {firstName:usuario,lastName:lastname,document,address,phone,email }, "POST");
+      const body = await resp.json();
+      if(body.Status==200){
+          swal({
+              title:"Correcto",
+              text:"Usuario creado correctamente",
+              icon:"success",
+              button:"OK"
+          })
+      }else{
+          swal({
+              title:"Error",
+              text:"No se ha podido crear el usuario",
+              icon:"error",
+              button:"OK"
+          })
+      }
+  }
+
   return (
       <>    
         <div >
@@ -60,38 +101,44 @@ export const Usuarios = () => {
             type="text"
             className="form-control mt-2"
             placeholder="Nombre del usuario"
-            // onChange={(e) => setusuario(e.target.value)}
+            onChange={(e) => setusuario(e.target.value)}
             />
             <input
             type="text"
             className="form-control mt-2"
             placeholder="Apellido del usuario"
-            // onChange={(e) => setlastname(e.target.value)}
+            onChange={(e) => setlastname(e.target.value)}
             />
             <input
             type="number"
             className="form-control mt-2"
             placeholder="Document del usuario"
-            // onChange={(e) => setdocument(e.target.value)}
+            onChange={(e) => setdocument(e.target.value)}
             />
             <input
             type="text"
             className="form-control mt-2"
             placeholder="Dirección del usuario"
-            // onChange={(e) => setaddress(e.target.value)}
+            onChange={(e) => setaddress(e.target.value)}
             />
             <input
             type="number"
             className="form-control mt-2"
             placeholder="Número del usuario"
-            // onChange={(e) => setphone(e.target.value)}
+            onChange={(e) => setphone(e.target.value)}
+            />
+            <input
+            type="text"
+            className="form-control mt-2"
+            placeholder="Email del usuario"
+            onChange={(e) => setemail(e.target.value)}
             />
             <button
             type="submit"
             className="btn btn-primary mt-2 form-control"
-            // onClick={handleSubmit}
+            onClick={handleSubmit}
             >
-            Actualizar usuario
+            Crear usuario
             </button>
         </div>
         </div>
