@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -19,7 +18,6 @@ const useStyles = makeStyles({
 
 export const Usuarios = () => {
   const classes = useStyles();
-  const { usuarioId } = useParams();
   const [usuario, setusuario] = useState("");
   const [lastname, setlastname] = useState("");
   const [phone, setphone] = useState(0);
@@ -30,17 +28,7 @@ export const Usuarios = () => {
         traerData();
     }, []);
 
-    const TraerUsuario=async()=>{
-      const resp = await usuariosApi(`user/getone/${usuarioId}`);
-      const user = await resp.json();
-      setusuario(user[0].firstName);
-      setlastname(user[0].lastName);
-      setphone(user[0].phone);
-      setaddress(user[0].address);
-      setdocument(user[0].document);
-      setemail(user[0].email)
-      console.log(usuario)
-  }
+
 
     const [usuarios, setUsuarios] = useState([]);
 
